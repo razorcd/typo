@@ -15,6 +15,92 @@ describe Admin::CategoriesController do
     get :index
     assert_response :redirect, :action => 'index'
   end
+  
+  it "index should redirect to new" do
+    get :index
+    expect(response).to redirect_to :action => :new
+  end
+
+  describe "test_new" do
+
+      # before :each do
+      # end
+      # let (:existing_category) {FactoryGirl.create(:category)
+
+      it "should render template 'new' with a new category" do
+        get :new
+        expect(assigns(:category)).to be_a_new(Category)
+        expect(response).to render_template :new
+      end
+
+  end
+  
+  describe "test_create", :tag => true do
+    let (:category_attr) {FactoryGirl.attributes_for(:category)}  
+    
+    it "should create a new category" do
+      # Category.should_receive :new
+      # Category.should_receive :save
+      expect { post :edit, {:category => category_attr} }.to change{Category.count}.by 1
+      expect(assigns(:category)).to eq Category.last
+      expect(response).to redirect_to :action => :new
+    end
+  end
+  
+
+
+
+# let (:category1) {FactoryGirl.create(:category)
+# let (:category_attr) {FactoryGirl.attributes(:category)
+# @new_record = Category.new
+
+# - any_instance_of(Admin::CategoriesController).should receive :new_or_edit
+
+# get new
+#   - should render :new
+#   - assigns(:category).should eq @new_record
+#   # should assign :category
+#   # - Category.should_receive :new and_return @new_record
+#   expect(assigns(:category)).to be_a_new(Category)
+
+
+# get edit
+#   get :edit, params => category1
+#   - should render :new
+#   - @category.should eq category1
+#   - should assign @category
+#   - Category.should_receive :find
+  
+  
+# post create
+#   post :edit , params => category_attr
+#   - controller.params.should eq category_attr
+#   - should render :new
+#   - @category.should eq category_attr
+#   - should assign @category
+#   - Category.should_receive :new
+#   - response.should redirect_to :action => :new
+  
+
+# post update
+#   new_cat = category1
+#   new_cat.name = "ABC"
+#   post :edit , params => new_cat
+#   - controller.params.should eq new_cat
+#   - should render :new
+#   - @category.should eq new_cat
+#   - should assign @category
+#   - Category.should_receive :find
+#   - response.should redirect_to :action => :new
+  
+
+
+
+
+
+
+
+
 
   describe "test_edit" do
     before(:each) do
@@ -64,3 +150,4 @@ describe Admin::CategoriesController do
   end
   
 end
+

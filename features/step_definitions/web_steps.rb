@@ -56,9 +56,9 @@ And /^I am logged into the admin panel$/ do
 end
 
 # Single-line step scoper
-When /^(.*) within (.*[^:])$/ do |step, parent|
-  with_scope(parent) { When step }
-end
+# When /^(.*) within (.*[^:])$/ do |step, parent|
+#   with_scope(parent) { When step }
+# end
 
 # Multi-line step scoper
 When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
@@ -80,6 +80,21 @@ end
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
 end
+
+
+
+When /^(?:|I )follow "([^"]*)" within css class "([^"]*)"$/ do |link, css_class|
+  within(:css, ".#{css_class}") do
+    click_link(link)
+  end 
+end
+
+Then /^(?:|I )should see "([^"]*)" within css id "([^"]*)"$/ do |text, css_id|
+  page.find_by_id(css_id).should have_content text
+end
+
+
+
 
 When /^(?:|I )fill in "([^"]*)" with "([^"]*)"$/ do |field, value|
   fill_in(field, :with => value)
