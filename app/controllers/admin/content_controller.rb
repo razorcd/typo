@@ -34,6 +34,7 @@ class Admin::ContentController < Admin::BaseController
     article2 = Article.find(params[:merge_with])
     new_body = "#{article1.body} #{article2.body}" 
     article1.body = new_body
+    article1.comments << article2.comments
     article1.save
     article2.delete
     redirect_to :action => 'edit', id: article1.id
