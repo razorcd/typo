@@ -79,7 +79,6 @@ describe Admin::ContentController do
       assigns(:articles).should_not == [article]
       response.should be_success
     end
-
   end
 
   shared_examples_for 'autosave action' do
@@ -181,7 +180,6 @@ describe Admin::ContentController do
   end
 
   describe 'insert_editor action' do
-
     before do
       Factory(:blog)
       @user = Factory(:user, :profile => Factory(:profile_admin, :label => Profile::ADMIN))
@@ -480,6 +478,28 @@ describe Admin::ContentController do
     it_should_behave_like 'new action'
     it_should_behave_like 'destroy action'
     it_should_behave_like 'autosave action'
+
+
+
+  describe "merge_articles", :focus => true do
+    before(:each) do
+      @article1 = Factory(:article, title: "First Article", body: "Body of the first article")
+      @article2 = Factory(:article, title: "Second Article", body: "Body of the second article")
+    end
+    
+
+    it "should create a new article and delete the previous two articles" do
+      post :merge_articles, {id: @article1.id, merge_with: @article2.id }
+      article = Article.last
+      article.title.should eq @article1.title
+      article.body.should eq "#{@article1.body} #{@article2.body}"
+     
+      expect(Article.find_by_id(@article2.id)).to eq nil
+      response.should redirect_to :action => "edit", id: article.id
+    end
+    
+  end
+
 
     describe 'edit action' do
 

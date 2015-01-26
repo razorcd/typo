@@ -27,6 +27,21 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+
+  def merge_articles
+    # debugger
+    article1 = Article.find(params[:id])
+    article2 = Article.find(params[:merge_with])
+    new_body = "#{article1.body} #{article2.body}" 
+    article1.body = new_body
+    article1.save
+    article2.delete
+    redirect_to :action => 'edit', id: article1.id
+  end
+
+
+
+
   def edit
     @article = Article.find(params[:id])
     unless @article.access_by? current_user
